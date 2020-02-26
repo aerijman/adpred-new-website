@@ -1,0 +1,61 @@
+{% extends "end_page.html" %}
+  {%block style %}
+    <style>
+    .sidebar {
+      height: 100%;
+      width: 180px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      overflow-x: hidden;
+      padding-top: 16px;
+    }
+
+    .sidebar a {
+      padding: 6px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 20px;
+      color: #818181;
+      display: block;
+    }
+
+    .sidebar a:hover {
+      color: #f1f1f1;
+    }
+
+    .main {
+      margin-left: 160px; /* Same as the width of the sidenav */
+      padding: 0px 10px;
+    }
+
+    @media screen and (max-height: 450px) {
+      .sidebar {padding-top: 15px;}
+      .sidebar a {font-size: 18px;}
+    }
+    </style>
+  {% endblock %}
+
+  {% block body %}
+    <div class="sidebar">
+      <a href="{{ url_for('download', filename=csv_data_smooth) }}">Raw Data</a>
+      <a href="{{ url_for('download', filename=csv_data) }}">Smoothed_data</a>
+      <a href="">Install ADpred</a>
+      <a href="">ADpred in Github</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="main">a
+      <div style="background-color:powderblue; text-align:center; margin:0px 5px 5px 20px">
+        <h1>{{ name }}</h1> <h2>Probability of AD over the entire protein sequence</h2>
+      </div>
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+      <div class="chart" id="bargraph">
+          <script>
+              var graphs = {{plot | safe}};
+              Plotly.plot('bargraph',graphs,{});
+          </script>
+      </div>
+    </div>
+  {% endblock %}
