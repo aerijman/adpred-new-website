@@ -39,8 +39,9 @@
 
   {% block body %}
     <div class="sidebar">
-      <a href="{{ url_for('download', filename=csv_data_smooth) }}">Raw Data</a>
-      <a href="{{ url_for('download', filename=csv_data) }}">Smoothed_data</a>
+      <a href="{{ url_for('index') }}">Home Page</a>
+      <a href="{{ url_for('download', filename=csv_data) }}" download>Raw Data</a>
+      <a href="{{ url_for('download', filename=csv_data_smooth) }}" download>Smoothed_data</a>
       <a href="">Install ADpred</a>
       <a href="https://github.com/aerijman/adpred-new-website">ADpred in Github</a>
       <a href="#contact">Contact</a>

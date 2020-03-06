@@ -90,14 +90,21 @@ def predict_full(seq, struct, random_id):
     csv_file = 'predictions/' + random_id + '.csv'
     fasta = 'fastas/' + random_id + '.fasta'
     with open(csv_file,'w') as f:
-        f.write(','.join([str(i) for i in results]))
+        f.write('position,adpred-score\n')
+        #f.write(','.join([str(i) for i in results]))
+        f.write('\n'.join(['{},{}'.format(n,i) for n,i in enumerate(results)]))
+    
+    print(random_id+'.csv')
+
 
     # save into file the smoothed data
     y = np.array([i if i>0.8 else 0 for i in results])
     results_smooth = np.convolve(y, np.ones(20)/20, "same")    
     csv_file = 'predictions/' + random_id + '_smooth.csv'
     with open(csv_file,'w') as f:
-        f.write(','.join([str(i) for i in results_smooth]))
+        f.write('position,adpred-score\n')
+        f.write('\n'.join(['{},{}'.format(n,i) for n,i in enumerate(results)]))
+        #f.write(','.join([str(i) for i in results_smooth]))
 
     return results, random_id+'.csv', random_id+'_smooth.csv' #, fasta, random_id+'.csv', random_id+'_smooth.csv'
 
