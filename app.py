@@ -1,13 +1,25 @@
 from flask import Flask, request, render_template, url_for, send_from_directory
 from bin.utils import *
 from uuid import uuid4
-#from flask_mail import Mail, Message
+from flask_mail import Mail, Message
+import os, string
 
 import resource, time
 
-
 app = Flask(__name__)
-#mail = Mail(app)
+
+app.config.update({
+    'DEBUG': True,
+    'MAIL_SERVER': 'smtp.gmail.com',
+    'MAIL_PORT': 465,
+    'MAIL_USE_TLS': False,
+    'MAIL_USE_SSL': True,
+    'MAIL_USERNAME': 'adprepredictor@gmail.com',
+    'MAIL_PASSWORD': 'mejjEp-kekso2-cymqus',
+})
+
+
+mail = Mail(app)
 
 
 @app.route('/', methods=['GET','POST'])
@@ -48,21 +60,30 @@ def index():
     struct = get_psipred(randName, email)
     adscore, csv, csv2 = predict_full(sequence, struct, randName)
 
-    print(sequence, struct, adscore, email)
-
     plot = create_plot(adscore, sequence)
 
     #print(time.time()-t1, 'seconds')
     #print(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
 
+
+    #print(sequence, struct, adscore, email)
+    html_results = 'rendered_results/' + str(uuid4()) + '.html'
+
+
     # USE THIS TO SAVE THE RENDERED RESULTS AND SEND EMAIL WITH LINK WHEN IS READY. ALSO HAVE A CRON PROCESS THAT DELETES FILES OLDER THAN 24 HOURS.
     result_template = render_template("results.html", name='ADPred', plot=plot, csv_data=csv, csv_data_smooth=csv2, index='/index')
-    with open('test.html','w') as f:
+    with open(html_results,'w') as f:
         f.write(result_template)
 
+    print('*********************',getBaseURL())
+   
+
     ####################
-    #msg = Message("Hello", sender="aerijman@fredhutch.com", recipients=["aerijman@neb.com"])
-    #mail.send(msg)
+    msg = Message(subject="ADpred results are ready", 
+                  body="Your ADpred results are available at {}".format(getBaseURL() + '/' + html_results), 
+                  sender="adprepredictor@gmail.com", 
+                  recipients=[email])
+    mail.send(msg)
     #####################
 
     return result_template
