@@ -146,7 +146,7 @@ def clean_input(fasta):
 
 def get_psipred(filename, email):
 
-    url = 'http://bioinf.cs.ucl.ac.uk/psipred/api/submission.json'
+    url = 'https://bioinf.cs.ucl.ac.uk/psipred/api/submission.json'
 
     payload = {'input_data': (filename, open(filename, 'rb'))}
     data = {'job': 'psipred',
