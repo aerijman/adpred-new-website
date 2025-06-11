@@ -156,7 +156,7 @@ def get_psipred(filename, email):
     r = requests.post(url, data=data, files=payload)
 
     uid = re.search('{\"UUID\":\"(.*)\",\"sub.*', r.text).group(1)
-    submission = 'http://bioinf.cs.ucl.ac.uk/psipred/api/submission/'+uid
+    submission = 'https://bioinf.cs.ucl.ac.uk/psipred/api/submission/'+uid
 
     Completed = False
     while not Completed:
@@ -167,7 +167,7 @@ def get_psipred(filename, email):
             Completed = True
 
             horiz = re.search('/submissions/(.*.horiz)&quot', a.text).group(1)
-            results = 'http://bioinf.cs.ucl.ac.uk/psipred/api/submissions/' + horiz
+            results = 'https://bioinf.cs.ucl.ac.uk/psipred/api/submissions/' + horiz
 
             r = requests.get(results)
 
